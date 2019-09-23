@@ -1,0 +1,78 @@
+{
+  "pages": [
+    "pages/tab_1/main",
+    "pages/tab_2/main",
+    "pages/tab_3/main",
+    "pages/goods_detail/main",
+    "pages/tab_4/main",
+    "pages/tab_5/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "",
+    "navigationBarTextStyle": "black",
+    "enablePullDownRefresh": true
+  },
+  "tabBar": {
+    "color": "#888",
+    "backgroundColor": "#f8f8f8",
+    "selectedColor": "#54bf7b",
+    "borderStyle": "white",
+
+    "list": [{
+      "text": "首页",
+      "pagePath": "pages/tab_1/main",
+      "iconPath": "static/img/home_icon.png",
+      "selectedIconPath": "static/img/home_icon_active.png"
+    }, {
+      "text": "社区",
+      "pagePath": "pages/tab_2/main",
+      "iconPath": "static/img/village_icon.png",
+      "selectedIconPath": "static/img/village_icon_active.png"
+    }, {
+      "text": "商城",
+      "pagePath": "pages/tab_3/main",
+      "iconPath": "static/img/shop_menu_icon.png",
+      "selectedIconPath": "static/img/shop_icon_active.png"
+    }, {
+      "text": "记录",
+      "pagePath": "pages/tab_4/main",
+      "iconPath": "static/img/order_icon.png",
+      "selectedIconPath": "static/img/order_icon_active.png"
+    }, {
+      "text": "我的",
+      "pagePath": "pages/tab_5/main",
+      "iconPath": "static/img/my_icon.png",
+      "selectedIconPath": "static/img/my_icon_active.png"
+    }],
+
+    "items": [{
+      "name": "首页",
+      "pagePath": "pages/tab_1/main",
+      "icon": "static/tabs/home.png",
+      "activeIcon": "static/tabs/home-active.png"
+    }, {
+      "name": "发现",
+      "pagePath": "pages/tab_2/main",
+      "icon": "static/tabs/orders.png",
+      "activeIcon": "static/tabs/orders-active.png"
+    }, {
+      "name": "商城",
+      "pagePath": "pages/tab_3/main",
+      "icon": "static/tabs/orders.png",
+      "activeIcon": "static/tabs/orders-active.png"
+    }, {
+      "name": "记录",
+      "pagePath": "pages/tab_4/main",
+      "icon": "static/tabs/orders.png",
+      "activeIcon": "static/tabs/orders-active.png"
+    }, {
+      "name": "我的",
+      "pagePath": "pages/tab_5/main",
+      "icon": "static/tabs/orders.png",
+      "activeIcon": "static/tabs/orders-active.png"
+    }],
+    "position": "bottom"
+  }
+}
