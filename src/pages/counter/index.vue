@@ -3,7 +3,7 @@
     <p>Vuex counter：{{ count }}</p>
     <p>
       <button @click="increment">+</button>
-      <button @click="decrement">-</button>
+      <button @click="decrement">-aaaa</button>
     </p>
   </div>
 </template>
