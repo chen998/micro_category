@@ -90,12 +90,12 @@ img {
     padding: 0.15rem 0;
   }
   .goodsItem {
-    width: 41%;
     padding: 0.2rem;
     background: #fff;
     box-shadow: 0 0 0.1rem #ececec;
     border-radius: 0.15rem;
     margin: 0.1rem 0;
+    width: 43%;
     .goodsImg {
       height: 2.5rem;
       border-radius: 0.15rem;

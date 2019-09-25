@@ -59,24 +59,9 @@
             @getuserinfo="getUserInfo"
           >立即登录</button>
         </div>
-        <div class="signWrap">
-          <div class="sign">签到领积分</div>
-        </div>
-      </div>
-    </div>
-    <div class="integralWrap">
-      <div class="title">我的资产</div>
-      <div class="integralItem">
-        <div class="t">当前积分</div>
-        <div class="val">98</div>
-      </div>
-      <div class="integralItem">
-        <div class="t">投递次数</div>
-        <div class="val">39</div>
-      </div>
-      <div class="integralItem">
-        <div class="t">环保积分</div>
-        <div class="val">70</div>
+        <!-- <div class="signWrap">
+          <div class="sign">签到</div>
+        </div> -->
       </div>
     </div>
     <div class="row-list">
@@ -177,41 +162,13 @@
   </div>
 </template>
 <style lang="scss" scoped>
-.integralWrap {
-  background: #fff;
-  border-radius: 0.2rem;
-  color: #444;
-  margin: 0 0.2rem;
-  margin-top: -1rem;
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  padding: 0.2rem;
-  .title {
-    width: 100%;
-    margin-bottom: 0.2rem;
-  }
-  .integralItem {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    .t {
-      padding: 0.2rem 0;
-    }
-    .val {
-      margin-bottom: 0.2rem;
-    }
-  }
-}
 .signWrap {
   display: flex;
   align-items: center;
-  margin-right: 0.3rem;
-  margin-top: 0.5rem;
   .sign {
     border-radius: 0.3rem;
     height: 0.5rem;
-    padding: 0.02rem 0.2rem;
+    padding: 0.05rem 0.2rem;
     letter-spacing: 0.05rem;
     line-height: 0.5rem;
     color: #54bf7b;
@@ -237,7 +194,7 @@ img {
 }
 .top {
   background: #54bf7b;
-  height: 2.5rem;
+  height: 3.5rem;
   padding: 0.2rem;
   border-radius: 0 0 0.4rem 0.4rem;
   display: flex;
@@ -304,7 +261,7 @@ img {
   background: #fff;
   border-radius: 0.2rem;
   margin: 0.2rem;
-  // margin-top: -1rem;
+  margin-top: -1rem;
   color: #444;
   .row {
     display: flex;

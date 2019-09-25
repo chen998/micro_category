@@ -25,7 +25,7 @@
           </div>
         </swiper>
       </div>
-      <div class="menu-wrap">
+      <div class="menu-wrap opac">
         <div class="menu-item">
           <div class="icon icon1">
             <img
@@ -72,7 +72,7 @@
           回收指南
         </div>
       </div>
-      <div class="advert-wrap">
+      <div class="advert-wrap opac">
         <div class="advert-item">
           <div class="left">
             <h2>大件回收</h2>
@@ -94,7 +94,7 @@
           >
         </div>
       </div>
-      <div class="login">
+      <div class="login opac">
         <div class="t">我的环保积分</div>
         <!-- <div
           class="btn"
@@ -158,7 +158,7 @@ img {
   left: 0;
   width: 100%;
   min-height: 100%;
-  background: #fff;
+  background: #f5f5f5;
   font-size: 0.3rem;
   .main {
     margin: 0.3rem;
@@ -186,6 +186,7 @@ img {
   border-radius: 0.2rem;
   flex-wrap: nowrap;
   justify-content: space-around;
+  // background: #fff;
   .menu-item {
     display: flex;
     flex-flow: column;
@@ -232,14 +233,15 @@ img {
   justify-content: space-between;
   .advert-item {
     flex: 1;
-    margin-right: 0.25rem;
+    margin-right: 0.19rem;
     padding: 0.25rem;
-    box-shadow: 0rem 0.08rem 0.1rem #ececec;
     display: flex;
     flex-wrap: nowrap;
     align-items: flex-end;
     white-space: nowrap;
     overflow: hidden;
+    background: #fff;
+    border-radius: 0.2rem;
     .left {
       height: 100%;
     }
@@ -270,6 +272,8 @@ img {
   width: 100%;
   position: relative;
   margin: 0.3rem 0;
+  background: #fff;
+  border-radius: 0.2rem;
   .btn {
     width: 3rem;
     height: 0.75rem;
@@ -281,8 +285,8 @@ img {
   }
   .t {
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 0.2rem;
+    top: 0.2rem;
     padding-left: 0.15rem;
     &::after {
       content: "";
@@ -298,10 +302,10 @@ img {
   }
 }
 .cate-wrap {
-  box-shadow: 0 0rem 0.05rem #ececec;
   padding: 0.2rem;
   background: #fff;
   margin: 0;
+  border-radius: 0.2rem;
   .t {
     display: flex;
     flex-wrap: nowrap;
@@ -336,7 +340,8 @@ img {
   justify-content: space-between;
   white-space: nowrap;
   width: 100%;
-  padding: 0 0.3rem;
+  padding: 0.3rem;
+  margin-top: 0.3rem;
   .left {
     width: 50%;
     display: flex;

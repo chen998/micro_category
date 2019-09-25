@@ -5,7 +5,9 @@
     "pages/tab_3/main",
     "pages/goods_detail/main",
     "pages/tab_4/main",
-    "pages/tab_5/main"
+    "pages/tab_5/main",
+    "pages/addressList/main",
+    "pages/Add_address/main"
   ],
   "window": {
     "backgroundTextStyle": "dark",
@@ -33,8 +35,8 @@
     }, {
       "text": "商城",
       "pagePath": "pages/tab_3/main",
-      "iconPath": "static/img/shop_menu_icon.png",
-      "selectedIconPath": "static/img/shop_icon_active.png"
+      "iconPath": "static/img/shop_icon.png",
+      "selectedIconPath": "static/img/shop_active_icon.png"
     }, {
       "text": "记录",
       "pagePath": "pages/tab_4/main",
