@@ -143,7 +143,10 @@
           >
         </div>
       </div>
-      <div class="row">
+      <div
+        class="row"
+        @click="$nav('../feedback/main')"
+      >
         <div class="left">
           <img
             src="/static/img/feedback.png"
@@ -188,6 +191,7 @@
   flex-wrap: wrap;
   padding: 0.2rem;
   .title {
+    font-weight: bold;
     width: 100%;
     margin-bottom: 0.2rem;
   }
@@ -195,6 +199,7 @@
     display: flex;
     flex-flow: column;
     align-items: center;
+    color: #777;
     .t {
       padding: 0.2rem 0;
     }

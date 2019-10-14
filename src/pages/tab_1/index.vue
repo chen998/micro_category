@@ -128,7 +128,7 @@
           @getuserinfo="getUserInfo"
         >微信一键登录</button>
       </div>
-      <div class="cate-wrap">
+      <div class="address-wrap">
         <div class="t">
           <div class="left">
             <img
@@ -158,7 +158,7 @@ img {
   left: 0;
   width: 100%;
   min-height: 100%;
-  background: #f5f5f5;
+  background: #fafafa;
   font-size: 0.3rem;
   .main {
     margin: 0.3rem;
@@ -241,6 +241,8 @@ img {
     white-space: nowrap;
     overflow: hidden;
     background: #fff;
+    // border: 0.02rem solid #efefef;
+    box-shadow: 0.02rem 0.02rem 0.02rem #efefef;
     border-radius: 0.2rem;
     .left {
       height: 100%;
@@ -272,7 +274,7 @@ img {
   width: 100%;
   position: relative;
   margin: 0.3rem 0;
-  background: #fff;
+  // background: #fff;
   border-radius: 0.2rem;
   .btn {
     width: 3rem;
@@ -301,11 +303,13 @@ img {
     }
   }
 }
-.cate-wrap {
+.address-wrap {
   padding: 0.2rem;
-  background: #fff;
+  // background: #fff;
   margin: 0;
   border-radius: 0.2rem;
+  background: #fefefe;
+  box-shadow: 0 0 0.02rem #efefef;
   .t {
     display: flex;
     flex-wrap: nowrap;

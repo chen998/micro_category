@@ -7,6 +7,7 @@
     "pages/tab_4/main",
     "pages/tab_5/main",
     "pages/addressList/main",
+    "pages/feedback/main",
     "pages/Add_address/main"
   ],
   "window": {

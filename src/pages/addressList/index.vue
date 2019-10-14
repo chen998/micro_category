@@ -55,6 +55,7 @@
     justify-content: center;
     background: #54bf7b;
     color: #fff;
+    border-radius: 0.15rem;
   }
 }
 .tag {
