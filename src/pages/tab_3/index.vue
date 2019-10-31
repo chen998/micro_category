@@ -1,22 +1,37 @@
 <template>
   <div class="page">
+    <div class="top">
+      <div class="search-wrap">
+        <input
+          type="text"
+          placeholder="搜索"
+          v-model="form.productName"
+          @input="getData()"
+        />
+        <img
+          @click="getByScope()"
+          src="/static/img/31.png"
+          alt
+        />
+      </div>
+    </div>
     <div class="main">
       <div class="goodsList">
         <div
           class="goodsItem"
-          v-for="(item, index) in 10"
+          v-for="(item, index) in list"
           :key="index"
-          @click="$nav('../goods_detail/main', 5, item)"
+          @click="$nav('../goods_detail/main?id=' + item.id, 5, item)"
         >
           <div class="goodsImg">
             <img
-              src="https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640"
+              :src="item.productIcon"
               alt=""
             >
           </div>
-          <div class="goodsName">时尚定制充电宝时尚定制充电宝时尚定制充电宝</div>
+          <div class="goodsName">{{item.productName}}</div>
           <div class="price">
-            <span class="integral"><img src="/static/img/integral.png" />99积分</span>
+            <span class="integral"><img src="/static/img/integral.png" />{{item.productPrice}}</span>
             <span class="btn">兑换</span>
           </div>
         </div>
@@ -30,12 +45,13 @@
   width: 100%;
   height: 8vh;
   display: flex;
+  background: #fff;
   justify-content: center;
   align-items: center;
 }
 .search-wrap {
   width: 87%;
-  height: 0.6rem;
+  height: 0.7rem;
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
@@ -63,10 +79,10 @@ img {
   left: 0;
   width: 100%;
   min-height: 100%;
-  background: #fff;
+  background: #f5f5f5;
   .main {
     display: flex;
-    height: 100vh;
+    // height: 100vh;
     background: #f5f5f5;
     font-size: 0.28rem;
   }
@@ -88,6 +104,7 @@ img {
     color: #777;
     font-size: 0.27rem;
     padding: 0.15rem 0;
+    width: 100%;
   }
   .goodsItem {
     padding: 0.2rem;
@@ -142,15 +159,10 @@ img {
 export default {
   data () {
     return {
-      imgUrls: [
-        'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640',
-        'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640',
-        'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
-      ],
-      indicatorDots: false,
-      autoplay: false,
-      interval: 5000,
-      duration: 1000,
+      list: [],
+      form: {
+        productName: ""
+      },
       cateList: [
         {name: '服装', id: 1},
         {name: '首饰', id: 2},
@@ -178,11 +190,23 @@ export default {
     }
   },
   onShow () {
-    wx.setNavigationBarTitle({
-      title: '商城'
-    })
+    this.getData()
   },
   methods: {
+    getData () {
+      this.$get('api/product/findAll', this.form).then(res => {
+        if (res.data.success) {
+          var list = res.data.data
+          list.forEach(v => {
+            if (v.productIcon) {
+              v.productIcon = this.$ApiUrl + v.productIcon.substr(1)
+            }
+          })
+          this.list = list
+          console.log(res, 'res')
+        }
+      })
+    }
   },
   async onPullDownRefresh () {
   // to doing..

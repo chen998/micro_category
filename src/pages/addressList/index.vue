@@ -5,12 +5,16 @@
         class="item"
         v-for="(item, index) in list"
         :key="index"
+        @click="$nav('../Add_address/main?isEdit=true&item=' + JSON.stringify(item))"
       >
         <div class="left">
-          <div class="user"><span class="name">东旭</span><span class="phone">135555555555</span></div>
+          <div class="user"><span class="name">{{item.userName}}</span><span class="phone">{{item.phone}}</span></div>
           <div class="addressInfo">
-            <span class="tag">默认</span>
-            北京昌平东北及肥哦偶爱为飞机飞机飞机哦埃及佛i危机发我i阿娇哦i阿福网
+            <span
+              class="tag"
+              v-if="item.defaultAddress == 1"
+            >默认</span>
+            {{item.area + item.address}}
           </div>
         </div>
         <div class="edit">
@@ -21,7 +25,7 @@
         </div>
       </div>
       <div
-        class="item"
+        class="item none"
         v-if="list.length < 1"
       >
         暂无收货地址
@@ -81,6 +85,9 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.2rem 0;
+    &.none {
+      justify-content: center;
+    }
     .left {
       padding-left: 0.2rem;
       display: flex;
@@ -127,10 +134,20 @@ img {
 export default {
   data () {
     return {
-      list: [1,2,3]
+      list: []
     }
   },
+  onShow () {
+    this.getList()
+  },
   methods: {
+    getList () {
+      this.$get("api/address/findByOpenId").then(res => {
+        if (res.data.success) {
+          this.list = res.data.data
+        }
+      })
+    }
   }
 }
 </script>

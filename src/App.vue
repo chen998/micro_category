@@ -1,4 +1,12 @@
 <script>
+export default{
+  data () {
+    return {}
+  },
+  created () {
+    this.$checkSession('GET')
+  }
+}
 </script>
 
 <style lang="scss">

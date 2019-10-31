@@ -59,7 +59,11 @@
             @getuserinfo="getUserInfo"
           >立即登录</button>
         </div>
-        <div class="signWrap">
+        <div
+          class="signWrap"
+          v-if="userInfo.nickName"
+          @click="sign()"
+        >
           <div class="sign">签到领积分</div>
         </div>
       </div>
@@ -212,7 +216,9 @@
   display: flex;
   align-items: center;
   margin-right: 0.3rem;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+  flex: 1;
+  justify-content: center;
   .sign {
     border-radius: 0.3rem;
     height: 0.5rem;
@@ -242,7 +248,7 @@ img {
 }
 .top {
   background: #54bf7b;
-  height: 2.5rem;
+  height: 3rem;
   padding: 0.2rem;
   border-radius: 0 0 0.4rem 0.4rem;
   display: flex;
@@ -256,7 +262,6 @@ img {
     display: flex;
     margin-top: -1rem;
     width: 100%;
-    justify-content: space-between;
     .head {
       width: 1.2rem;
       height: 1.2rem;
@@ -281,8 +286,6 @@ img {
     .right {
       display: flex;
       flex-flow: column;
-      justify-content: space-around;
-      flex: 1;
       .icon {
         width: 0.35rem;
         height: 0.35rem;
@@ -291,6 +294,7 @@ img {
         display: flex;
         flex-flow: wrap;
         align-items: center;
+        margin: 0.1rem 0;
       }
     }
   }
@@ -349,15 +353,27 @@ export default {
   onLoad () {
   },
   methods: {
+    sign () {
+      this.$get('api/signin/userSignin').then(res => {
+        if (res.data.success) {
+          this.$toast(res.data.msg)
+        }
+      })
+    },
     getPhoneNumber(res) {
       console.log(res, 'res')
     },
     getUserInfo () {
       var vm = this
       wx.getUserInfo({
-        success: function(res) {
-          console.log(res, 'res')
-          vm.$store.commit('saveUserInfo', JSON.parse(res.rawData))
+        success: res => {
+          var rawData = JSON.parse(res.rawData)
+          vm.$post('api/user/save', rawData).then(res => {
+            if (res.data.success) {
+              this.$toast('登录成功!')
+            }
+          })
+          vm.$store.commit('saveUserInfo', rawData)
         },
         fail (err) {
           console.log(err, 'err')

@@ -5,7 +5,7 @@
       <input
         class="input"
         type="text"
-        v-model="addressData.userName"
+        v-model="form.userName"
         placeholder="收货人姓名"
         placeholder-class="placeholder"
       />
@@ -15,19 +15,19 @@
       <input
         class="input"
         type="number"
-        v-model="addressData.phone"
+        v-model="form.mobile"
         placeholder="收货人手机号码"
         maxlength="11"
         placeholder-class="placeholder"
       />
     </view>
-    <view class="row b-b">
+    <view class="row b-b address">
       <text class="tit">地址</text>
       <text
         @click="chooseLocation"
         class="input"
       >
-        {{addressData.address || '点击选择地址'}}
+        {{form.area || '点击选择地址'}}
       </text>
     </view>
     <view class="row b-b">
@@ -35,7 +35,7 @@
       <input
         class="input"
         type="text"
-        v-model="addressData.area"
+        v-model="form.address"
         placeholder="楼号、门牌"
         placeholder-class="placeholder"
       />
@@ -45,7 +45,7 @@
       <text class="tit">设为默认</text>
       <switch
         class="fr"
-        :checked="addressData.defaultStatus > 0"
+        :checked="form.defaultAddress > 0"
         color="#54bf7b"
         @change="switchChange($event)"
       />
@@ -53,7 +53,7 @@
     <view
       v-if="isEdit"
       class="row default-row del"
-      @click="showModal()"
+      @click="del()"
     >
       <text class="tit">删除该收货地址</text>
     </view>
@@ -103,7 +103,11 @@ img {
     font-size: 30rpx;
     color: $font-color-dark;
   }
-
+  &.address {
+    input {
+      font-size: 0.27rem;
+    }
+  }
   .input {
     flex: 1;
     font-size: 30rpx;
@@ -134,33 +138,56 @@ img {
 export default {
   data () {
     return {
-      addressData: {
+      form: {
         userName: '',
-        phone: '',
+        mobile: '',
         address: '',
         area: '',
-        defaultStatus: 0
-      }
+        defaultAddress: 0
+      },
+      isEdit: false
     }
   },
+  onLoad () {
+    this.isEdit = this.$mp.query.isEdit
+    if (this.isEdit) {
+      var query = JSON.parse(this.$mp.query.item)
+      var data = {
+        userName: query.userName,
+        id: query.id,
+        mobile: query.mobile,
+        address: query.address,
+        area: query.area,
+        defaultAddress: query.defaultAddress
+      }
+      this.form = data
+      return
+    }
+    this.clearForm(this.form)
+  },
   methods: {
+    clearForm (form) {
+      for (var k in form) {
+        form[k] = ''
+      }
+    },
     switchChange(e) {
-			this.addressData.defaultStatus = e.mp.detail.value ? 1 : 0;
+			this.form.defaultAddress = e.mp.detail.value ? 1 : 0;
     },
     chooseLocation () {
       wx.chooseLocation({
         success: (data) => {
-          this.addressData.address = data.address
+          this.form.area = data.address
         }
       })
     },
-    showModal() {
+    del() {
       wx.showModal({
           title: '确定要删除该地址吗？',
           success:  res => {
             if (res.confirm) {
-              this.$post(`member/address/delete/${this.addressData.id}/${this.$store.getters.userInfo.id}`).then(res => {
-                if (res.data.code == 200) {
+              this.$get(`api/address/deleteById`, this.form).then(res => {
+                if (res.data.success) {
                   this.$toast('删除成功！')
                   setTimeout(() => {
                     wx.navigateBack()
@@ -172,27 +199,26 @@ export default {
       })
     },
     submit() {
-				var data = this.addressData
-				var form = Object.assign({}, this.addressData);
-				if (!data.userName) {
-					this.$toast('请填写收货人姓名');
+        var data = this.form
+        if (!data.userName) {
+					this.$toast('请输入收货人姓名!');
 					return;
 				}
-				if (!/(^1[3|4|5|7|8][0-9]{9}$)/.test(data.phone)) {
+				if (!/(^1[3|4|5|7|8][0-9]{9}$)/.test(data.mobile)) {
 					this.$toast('请输入正确的手机号码');
 					return;
 				}
-				if (!data.address) {
+				if (!data.area) {
 					this.$toast('请在地图选择所在位置');
 					return;
 				}
-				if (!data.area) {
-					this.$toast('请填写门牌号信息');
+				if (!data.address) {
+					this.$toast('请填写详细地址信息');
 					return;
 				}
 				if (this.isEdit) {
-					this.$post(`member/address/update/${form.id}`, form).then(res => {
-						if (res.data.code === 200) {
+					this.$post(`api/address/modifyById`, data).then(res => {
+						if (res.data.success) {
 							this.$toast('修改成功!')
 							setTimeout(() => {
 								wx.navigateBack();
@@ -201,10 +227,8 @@ export default {
 					})
 					return
 				}
-				form.memberId = this.$store.getters.userInfo.id;
-				form.userId = this.$store.getters.userInfo.id;
-				this.$post('member/address/add', form).then(res => {
-					if (res.data.code === 200) {
+				this.$post('api/address/save', data).then(res => {
+					if (res.data.success) {
 						this.$toast('添加成功!')
 						setTimeout(() => {
 							wx.navigateBack();

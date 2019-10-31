@@ -11,12 +11,12 @@
         >
           <div
             class="swiper-item"
-            v-for="(item, index) in imgUrls"
+            v-for="(item, index) in advertList"
             :key="index"
           >
             <swiper-item>
               <image
-                :src="item"
+                :src="item.image"
                 class="slide-image"
                 width="355"
                 height="150"
@@ -26,7 +26,10 @@
         </swiper>
       </div>
       <div class="menu-wrap opac">
-        <div class="menu-item">
+        <div
+          class="menu-item"
+          @click="sign()"
+        >
           <div class="icon icon1">
             <img
               src="/static/img/home_icon1.png"
@@ -35,7 +38,10 @@
           </div>
           每日签到
         </div>
-        <div class="menu-item">
+        <div
+          class="menu-item"
+          @click="$nav('../partners/main')"
+        >
           <div class="icon icon2">
             <img
               src="/static/img/home_icon2.png"
@@ -44,7 +50,10 @@
           </div>
           公益伙伴
         </div>
-        <div class="menu-item">
+        <div
+          class="menu-item"
+          @click="getScancode()"
+        >
           <div class="icon icon3">
             <img
               src="/static/img/home_icon3.png"
@@ -129,18 +138,35 @@
         >微信一键登录</button>
       </div>
       <div class="address-wrap">
-        <div class="t">
-          <div class="left">
-            <img
-              src="/static/img/location.png"
-              alt=""
-            >
-            紫金新干线
+        <div
+          class="showAll"
+          @click="$nav('../map/main')"
+        >
+          <span>附近的站点</span>
+          更多
+          <img
+            src="/static/img/right.png"
+            alt=""
+          >
+        </div>
+        <div class="left">
+          <div class="t">
+            {{markerData.cabinetName}}
+            <span class="status">正常</span>
           </div>
-          <div class="right">约<span class="meter">357m</span><img
-              src="/static/img/right.png"
-              alt=""
-            ></div>
+          <div class="meter">
+            距离{{markerData.dist}}
+          </div>
+        </div>
+        <div
+          class="right"
+          @click="openLocation(markerData)"
+        >
+          <img
+            src="/static/img/nav.png"
+            alt=""
+          >
+          导航
         </div>
       </div>
     </div>
@@ -304,38 +330,67 @@ img {
   }
 }
 .address-wrap {
-  padding: 0.2rem;
-  // background: #fff;
+  padding: 0.3rem 0.2rem;
   margin: 0;
   border-radius: 0.2rem;
   background: #fefefe;
-  box-shadow: 0 0 0.02rem #efefef;
-  .t {
+  box-shadow: 0 0 0.04rem #dfdfdf;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  font-size: 0.3rem;
+  color: #333;
+  .showAll {
+    width: 100%;
+    text-align: right;
+    color: #888;
+    margin-bottom: 0.5rem;
     display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    .left,
-    .right {
+    align-items: center;
+    justify-content: flex-end;
+    span {
       display: flex;
-      align-items: center;
+      flex: 1;
+      text-align: left;
     }
     img {
-      margin-right: 0.1rem;
-      width: 0.3rem;
-      height: 0.3rem;
-    }
-    .meter {
-      font-size: 0.4rem;
+      width: 0.35rem;
+      height: 0.35rem;
     }
   }
-  .menu-item {
-    margin: 0;
-    .icon {
-      background: none;
-      width: 0.7rem;
-      height: 0.7rem;
-      border: 1px solid rgb(0, 217, 255);
+  .left,
+  .right {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .right {
+    margin-right: 0.2rem;
+    img {
+      margin-bottom: 0.1rem;
     }
+  }
+  .left {
+    align-items: flex-start;
+    .t {
+      padding-bottom: 0.2rem;
+    }
+    .status {
+      border: 1px solid #54bf7b;
+      padding: 0.05rem 0.1rem;
+      color: #54bf7b;
+      font-size: 0.26rem;
+      border-radius: 0.1rem;
+    }
+  }
+  img {
+    width: 0.7rem;
+    height: 0.7rem;
+  }
+  .meter {
+    color: #777;
+    font-size: 0.28rem;
   }
 }
 .userInfo {
@@ -378,6 +433,7 @@ import login from '@/components/login'
 export default {
   data () {
     return {
+      advertList: [],
       imgUrls: [
         'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640',
         'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640',
@@ -386,20 +442,86 @@ export default {
       indicatorDots: false,
       autoplay: false,
       interval: 5000,
-      duration: 1000
+      duration: 1000,
+      lng: '',
+      lat: '',
+      markerData: {},
+      form: {
+        lat: '',
+        lon: ''
+      }
     }
   },
   components: {
     login
   },
   onShow () {
+    this.init()
+    this.getAdvert()
   },
   methods: {
+    sign () {
+      this.$get('api/signin/userSignin').then(res => {
+        if (res.data.success) {
+          this.$toast(res.data.msg)
+        }
+      })
+    },
+    openLocation (item) {
+        wx.openLocation({
+          longitude: Number(item.longitude),
+          latitude: Number(item.latitude),
+          name: item.cabinetName
+        })
+    },
+    getAdvert () {
+      this.$get('api/slideShow/findAll').then(res => {
+        if(res.data.success) {
+          var list = res.data.data
+          list.forEach(v => {
+            if (v.image) {
+              v.image = this.$ApiUrl + v.image.substr(1)
+            }
+          })
+          this.advertList = list
+        }
+      })
+    },
+    init () {
+      // var myAmapFun = new map.AMapWX({key:'8ad7ec1548a1382ea34e488b63f14c47'});
+      var that = this
+      wx.getLocation({
+        type: 'wgs84',
+        success: function (res) {
+          that.form.lon = res.longitude
+          that.form.lat = res.latitude
+          that.getData()
+        }
+      })
+    },
+    getData () {
+      this.$get('api/cabinetlocation/findNearby', this.form).then(res => {
+        if (res.data.success) {
+          var markerData = res.data.data[0]
+          markerData.dist = (markerData.dist / 1000).toFixed(2) + 'km'
+          this.markerData = markerData
+        }
+      })
+    },
     getUserInfo () {
       var that = this
       wx.getUserInfo({
         success: function (res) {
           that.$toast('登录成功!')
+        }
+      })
+    },
+    getScancode:function(){
+      var _this=this;
+      wx.scanCode({
+        onlyFromCamera: true,
+        success: (res) => {
+          console.log(res)
         }
       })
     }

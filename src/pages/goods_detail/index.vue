@@ -27,14 +27,14 @@
       </div>
     </div>
     <div class="detail">
-      <h3>时尚定制充电宝</h3>
-      <div class="desc rows_padding">独特设计, 便携大容量, 给你无处不在的安全感</div>
+      <h3>{{info.productName || ''}}</h3>
+      <!-- <div class="desc rows_padding">独特设计, 便携大容量, 给你无处不在的安全感</div> -->
       <div class="rows rows_padding">
         <div class="price">
-          <span class="val">100</span>
+          <span class="val">{{info.productPrice || ''}}</span>
           <span class="label">环保积分</span>
         </div>
-        <span class="sell">已售 162 件</span>
+        <!-- <span class="sell">已售 162 件</span> -->
       </div>
       <p class="rows rows_padding">
         <span>购买数量: </span>
@@ -65,11 +65,11 @@
     </div>
     <div class="detail">
       <h3>商品详情</h3>
-      <div class="detailHtml">
-        <img
-          src="https://images.unsplash.com/photo-1551446591-142875a901a1?w=640"
-          alt=""
-        >
+      <div
+        class="detailHtml"
+        v-html="info.productDescription"
+      >
+        <!-- {{info.productDescription}} -->
       </div>
     </div>
     <div class="submit-wrap">
@@ -241,7 +241,9 @@ export default {
       indicatorDots: false,
       autoplay: false,
       interval: 5000,
-      duration: 1000
+      duration: 1000,
+      id: '',
+      info: {}
     }
   },
   components: {
@@ -260,11 +262,21 @@ export default {
     }
   },
   onShow () {
-    wx.setNavigationBarTitle({
-      title: '商品详情'
-    })
+    this.id = this.$mp.query.id
+    this.getData()
   },
   methods: {
+    getData () {
+      this.$get('api/product/findById', {id: this.id}).then(res => {
+        if (res.data.success) {
+          var info = res.data.msg
+          this.info = info
+          var arr = []
+          arr.push(info.productIcon)
+          this.imgUrls = arr
+        }
+      })
+    },
     add () {
       var count = this.count
       count++

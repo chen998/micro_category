@@ -8,8 +8,15 @@
     "pages/tab_5/main",
     "pages/addressList/main",
     "pages/feedback/main",
+    "pages/map/main",
+    "pages/partners/main",
     "pages/Add_address/main"
   ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
   "window": {
     "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#fff",

@@ -123,7 +123,7 @@ export default {
       })
       data.images = imgs.join(',')
       this.$post('micro/baseService/feedback/add', data).then(res => {
-        if (res.data.code === 0) {
+        if (res.data.success) {
           this.$toast('提交成功!')
           setTimeout(() => {
             this.form = ''
