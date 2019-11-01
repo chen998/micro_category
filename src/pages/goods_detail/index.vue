@@ -272,6 +272,7 @@ export default {
           var info = res.data.msg
           this.info = info
           var arr = []
+          info.productIcon = this.$ApiUrl + info.productIcon.substr(1)
           arr.push(info.productIcon)
           this.imgUrls = arr
         }
