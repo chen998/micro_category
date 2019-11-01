@@ -67,7 +67,7 @@
       <h3>商品详情</h3>
       <div
         class="detailHtml"
-        v-html="info.productDescription"
+        v-html="html"
       >
         <!-- {{info.productDescription}} -->
       </div>
@@ -243,7 +243,9 @@ export default {
       interval: 5000,
       duration: 1000,
       id: '',
-      info: {}
+      info: {},
+	  serverSrc: "http://mengzhou.nat300.top",
+	  html:''
     }
   },
   components: {
@@ -269,12 +271,17 @@ export default {
     getData () {
       this.$get('api/product/findById', {id: this.id}).then(res => {
         if (res.data.success) {
-          var info = res.data.msg
+          var info = res.data.data
           this.info = info
           var arr = []
           info.productIcon = this.$ApiUrl + info.productIcon.substr(1)
           arr.push(info.productIcon)
-          this.imgUrls = arr
+          this.imgUrls = arr;
+		  //获取html数据
+		  let textareaHtml = res.data.data.productDescription; 
+		  var srcReg = /src=([\'\"]?([^\'\"]*)[\'\"]?)/ig;
+		  textareaHtml = textareaHtml.replace(srcReg,"src='"+this.serverSrc+"$2"+"'");
+		  this.html = textareaHtml;
         }
       })
     },
