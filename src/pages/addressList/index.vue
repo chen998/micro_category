@@ -5,7 +5,7 @@
         class="item"
         v-for="(item, index) in list"
         :key="index"
-        @click="$nav('../Add_address/main?isEdit=true&item=' + JSON.stringify(item))"
+        @click="nav(item)"
       >
         <div class="left">
           <div class="user"><span class="name">{{item.userName}}</span><span class="phone">{{item.phone}}</span></div>
@@ -147,6 +147,15 @@ export default {
           this.list = res.data.data
         }
       })
+    },
+    nav (item) {
+      if (this.$mp.query.select == 1) {
+        item.select = 1
+        this.$store.commit('SET_CHECKEDDATA', item)
+        wx.navigateBack();
+      } else {
+        this.$nav('../Add_address/main?isEdit=true&item=' + JSON.stringify(item))
+      }
     }
   }
 }

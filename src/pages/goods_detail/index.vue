@@ -51,7 +51,7 @@
           <input
             type="number"
             class="input"
-            v-model="count"
+            v-model="productCount"
           >
           <div
             class="right countBtn"
@@ -73,7 +73,10 @@
       </div>
     </div>
     <div class="submit-wrap">
-      <div class="submit-us">
+      <div
+        class="submit-us"
+        @click="submit()"
+      >
         立即兑换
       </div>
     </div>
@@ -232,7 +235,7 @@ import login from '@/components/login'
 export default {
   data () {
     return {
-      count: 1,
+      productCount: 1,
       imgUrls: [
         'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640',
         'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640',
@@ -252,14 +255,14 @@ export default {
     login
   },
   watch: {
-    count (nv, ov) {
+    productCount (nv, ov) {
       console.log(nv, 'nv')
       if (!nv) {
-        this.count = 1
+        this.productCount = 1
       }
       if (nv > 99) {
         this.$toast("一次最多兑换99件商品！")
-        this.count = 99
+        this.productCount = 99
       }
     }
   },
@@ -268,6 +271,16 @@ export default {
     this.getData()
   },
   methods: {
+    submit() {
+      var data = {
+        id: this.id,
+        productCount: this.productCount,
+        productPrice: this.info.productPrice,
+        productIcon: this.info.productIcon,
+        productName: this.info.productName
+      }
+      this.$nav('../submit_order/main?data=' + JSON.stringify(data))
+    },
     getData () {
       this.$get('api/product/findById', {id: this.id}).then(res => {
         if (res.data.success) {
@@ -277,24 +290,24 @@ export default {
           info.productIcon = this.$ApiUrl + info.productIcon.substr(1)
           arr.push(info.productIcon)
           this.imgUrls = arr;
-		  //获取html数据
-		  let textareaHtml = res.data.data.productDescription; 
-		  var srcReg = /src=([\'\"]?([^\'\"]*)[\'\"]?)/ig;
-		  textareaHtml = textareaHtml.replace(srcReg,"src='"+this.serverSrc+"$2"+"'");
-		  this.html = textareaHtml;
+          //获取html数据
+          let textareaHtml = res.data.data.productDescription; 
+          var srcReg = /src=([\'\"]?([^\'\"]*)[\'\"]?)/ig;
+          textareaHtml = textareaHtml.replace(srcReg,"src='"+this.serverSrc+"$2"+"'");
+          this.html = textareaHtml;
         }
       })
     },
     add () {
-      var count = this.count
-      count++
-      if (count > 99) {
+      var productCount = this.productCount
+      productCount++
+      if (productCount > 99) {
         this.$toast('每次最多兑换99件商品!')
       }
-      this.count = ++this.count < 99 ? this.count : 99
+      this.productCount = ++this.productCount < 99 ? this.productCount : 99
     },
     reduce () {
-      this.count = --this.count < 1 ? 1 : this.count
+      this.productCount = --this.productCount < 1 ? 1 : this.productCount
     },
     getUserInfo () {
       var that = this

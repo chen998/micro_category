@@ -6,11 +6,15 @@ vue.use(vuex)
 const store = new vuex.Store({
   state: {
     showLogin: false,
-    userInfo: {}
+    userInfo: {},
+    checkData: {} // 临时存储选中的数据
   },
   mutations: {
     toggleLogin(state, data) {
       state.showLogin = data
+    },
+    SET_CHECKEDDATA(state, data) {
+      state.checkData = data
     },
     saveUserInfo(state, data) {
       state.userInfo = data
@@ -26,7 +30,8 @@ const store = new vuex.Store({
       }
       console.log(userInfo, 'userInfo')
       return userInfo
-    }
+    },
+    checkData: state => state.checkData
   },
   actions: {}
 })

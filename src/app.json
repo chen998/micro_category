@@ -10,6 +10,7 @@
     "pages/feedback/main",
     "pages/map/main",
     "pages/partners/main",
+    "pages/submit_order/main",
     "pages/Add_address/main"
   ],
   "permission": {
