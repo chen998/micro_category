@@ -82,7 +82,10 @@
         </div>
       </div>
       <div class="advert-wrap opac">
-        <div class="advert-item">
+        <div
+          class="advert-item"
+          @click="$nav('../submit_come_in/main')"
+        >
           <div class="left">
             <h2>大件回收</h2>
             <!-- <span>一起养狗赚环保金</span> -->
@@ -115,7 +118,7 @@
         >
           <div class="left">
             <div class="account">
-              <span class="num">0</span>
+              <span class="num">{{Integral}}</span>
               <div class="title">当前积分</div>
             </div>
           </div>
@@ -125,7 +128,7 @@
               <div class="title">投递次数</div>
             </div>
             <div class="account">
-              <span class="num">0</span>
+              <span class="num">{{Excount}}</span>
               <div class="title">兑换次数</div>
             </div>
           </div>
@@ -430,6 +433,7 @@ img {
 </style>
 <script>
 import login from '@/components/login'
+import {mapState} from 'vuex'
 export default {
   data () {
     return {
@@ -458,6 +462,9 @@ export default {
   onShow () {
     this.init()
     this.getAdvert()
+  },
+  computed: {
+    ...mapState(['Integral', 'Excount'])
   },
   methods: {
     sign () {

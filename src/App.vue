@@ -5,6 +5,8 @@ export default{
   },
   created () {
     this.$checkSession('GET')
+    this.$store.dispatch('updateIntegral')
+    this.$store.dispatch('updateExcount')
   }
 }
 </script>

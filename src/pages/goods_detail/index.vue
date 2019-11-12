@@ -232,6 +232,7 @@
 </style>
 <script>
 import login from '@/components/login'
+import {mapState} from 'vuex'
 export default {
   data () {
     return {
@@ -254,6 +255,9 @@ export default {
   components: {
     login
   },
+  computed: {
+    ...mapState(['Integral'])
+  },
   watch: {
     productCount (nv, ov) {
       console.log(nv, 'nv')
@@ -272,6 +276,11 @@ export default {
   },
   methods: {
     submit() {
+      console.log(this.Integral, 'inteGral')
+      if (this.Integral <= 0) {
+        this.$toast('积分不足，无法兑换!')
+        return
+      }
       var data = {
         id: this.id,
         productCount: this.productCount,

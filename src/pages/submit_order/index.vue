@@ -83,7 +83,10 @@
           >
         </div>
       </span>
-      <div class="btn">提交订单</div>
+      <div
+        class="btn"
+        @click="save()"
+      >提交订单</div>
     </div>
   </div>
 </template>
@@ -108,7 +111,6 @@ export default {
   },
   onLoad () {
     var query = JSON.parse(this.$mp.query.data)
-    console.log(query, 'query')
     this.query = query
     this.total = (query.productPrice * query.productCount).toFixed(2)
   },
@@ -119,6 +121,29 @@ export default {
     ...mapState(['checkData'])
   },
   methods: {
+    save() {
+      var data = this.query
+      data.productId = data.id
+      this.$get('api/orders/save', data).then(res => {
+        if (res.data.success) {
+          this.$store.dispatch('updateIntegral')
+          this.$store.dispatch('updateExcount')
+          wx.showModal({
+            title: '下单成功',
+            cancelText: '回到首页',
+            confirmText: '回到商城',
+            showCancel: true,
+            success: res => {
+              if (res.cancel) {
+                this.$nav('../tab_1/main', 2)
+              } else {
+                this.$nav('../tab_3/main', 2)
+              }
+            }
+          })
+        }
+      })
+    },
     getAddress(select) {
       this.$get("api/address/findByOpenId").then(res => {
         if (res.data.success) {

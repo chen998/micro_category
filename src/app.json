@@ -11,6 +11,7 @@
     "pages/map/main",
     "pages/partners/main",
     "pages/submit_order/main",
+    "pages/submit_come_in/main",
     "pages/Add_address/main"
   ],
   "permission": {
