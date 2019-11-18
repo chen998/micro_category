@@ -12,7 +12,10 @@
     "pages/partners/main",
     "pages/submit_order/main",
     "pages/submit_come_in/main",
-    "pages/Add_address/main"
+    "pages/Add_address/main",
+    "pages/postMsg/main",
+    "pages/orderList/main",
+    "pages/webview/main"
   ],
   "permission": {
     "scope.userLocation": {

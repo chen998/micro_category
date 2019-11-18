@@ -4,6 +4,8 @@
 import tool from './index'
 import store from '@/store'
 var ApiUrl = 'http://mengzhou.nat300.top/'
+// var ApiUrl = 'http://192.168.0.105:8888/'
+var baseUrl = 'http://mengzhou.nat300.top/'
 
 function login(method = 'POST') {
   return new Promise((resolve, reject) => {
@@ -39,7 +41,7 @@ function checkSession() {
       var sessionKey = wx.getStorageSync('sessionKey') || '';
       //获取sessionKey如果缓存没有则重新调用login
       wx.request({
-        url: 'http://mengzhou.nat300.top/api/findBySessionKey',
+        url: ApiUrl + 'api/findBySessionKey',
         data: {
           sessionKey: sessionKey
         },
@@ -53,7 +55,7 @@ function checkSession() {
                 if (res.code) {
                   // 登录
                   wx.request({
-                    url: 'http://mengzhou.nat300.top/api/login',
+                    url: ApiUrl + 'api/login',
                     data: {
                       code: res.code
                     },
@@ -78,7 +80,7 @@ function checkSession() {
           if (res.code) {
             // 登录
             wx.request({
-              url: 'http://mengzhou.nat300.top/api/login',
+              url: ApiUrl + 'api/login',
               data: {
                 code: res.code
               },
@@ -171,5 +173,6 @@ export default {
   request,
   login,
   checkSession,
-  ApiUrl
+  ApiUrl,
+  baseUrl
 }

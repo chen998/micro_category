@@ -6,6 +6,7 @@
         <input
           type="text"
           v-model="form.recycleName"
+          placeholder="请输入垃圾名称"
         >
       </div>
       <div class="rows">
@@ -23,6 +24,29 @@
         </picker>
       </div>
       <div class="rows">
+        <div class="label">手机号</div>
+        <input
+          type="number"
+          maxlength="11"
+          v-model="form.mobile"
+          placeholder="请输入手机号"
+        >
+      </div>
+      <div class="rows">
+        <div class="label">收货地址</div>
+        <div
+          class="input"
+          :class="{hasVal: checkData.id}"
+          @click="$nav('../addressList/main?select=1')"
+        >
+          <span>{{checkData.area + checkData.address || '点击选择'}}</span>
+          <img
+            src="/static/img/right.png"
+            alt=""
+          >
+        </div>
+      </div>
+      <div class="rows">
         <div class="label">预约时间</div>
         <input
           type="text"
@@ -38,23 +62,18 @@
         >
       </div>
       <div class="record us">
-        <div class="t">上传图片（1张）
-          <div class="line">
-            <img
-              src="/static/img/border-bottom.png"
-              alt=""
-            >
-          </div>
-        </div>
+        <div class="t">上传图片（1张）</div>
         <div class="imgwrap">
           <div
             class="img-item"
-            v-for="(item, index) in imgs"
-            :key="index"
-            @click="uploadImg(index, item)"
+            @click="upload()"
           >
-            <img :src="item.src">
+            <img
+              v-if="imgUrl"
+              :src="baseImgUrl"
+            >
             <div
+              v-if="imgUrl"
               class="del"
               @click.stop="del(index)"
             >
@@ -64,20 +83,24 @@
               >
             </div>
           </div>
-
           <img
-            @click="uploadImg()"
+            @click="upload()"
             src="/static/img/upload_default.png"
             alt=""
-            v-if="imgs.length < 3"
+            v-if="!imgUrl"
           >
         </div>
       </div>
     </div>
+    <div
+      class="submit-us"
+      @click="save()"
+    >提交</div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -87,15 +110,65 @@ export default {
       form: {
         recycleName: '',
         appointmentTime: '',
-        message: ''
+        message: '',
+        mobile: '',
+        addressId: ''
       },
-      imgs: []
+      imgUrl: '',
+      baseImgUrl: ''
     }
   },
   onLoad () {
+    if (this.$mp.query.storage == 1) {
+      this.form = this.$getStorage('item')
+      console.log(this.form, 'form')
+    }
     this.getCateList()
   },
+  onUnload () {
+    this.cateList = []
+    this.cateName = []
+    this.selectValue = -1
+    this.clearForm(this.form)
+    this.imgUrl = ''
+    this.baseImgUrl = ''
+    this.$store.commit('SET_CHECKEDDATA', {})
+  },
+  computed: {
+    ...mapState(['checkData'])
+  },
   methods: {
+    del () {
+      this.imgUrl = ''
+    },
+    clearForm(data) {
+      for (var k in data) {
+        data[k] = ''
+      }
+    },
+    upload () {
+      var that = this
+      wx.chooseImage({
+        success: function(res) {
+          var tempFilePaths = res.tempFilePaths
+          wx.uploadFile({
+            url: that.$ApiUrl + 'api/upload', //仅为示例，非真实的接口地址
+            filePath: tempFilePaths[0],
+            name: 'file',
+            formData:{
+            },
+            success: function(res){
+              var data = JSON.parse(res.data).data[0]
+              that.imgUrl = data
+              that.baseImgUrl = that.$ApiUrl + data.substr(1)
+            },
+            fail: function (err) {
+              console.log(err, 'err')
+            }
+          })
+        }
+      })
+    },
     changeCate(e) {
       this.selectValue = e.mp.detail.value
     },
@@ -104,8 +177,49 @@ export default {
         if (res.data.success) {
           this.cateList = res.data.data
           this.cateList.forEach(v => {
-            this.cateName.push(v.recycleCategoryName)
+            if (v.recycleCategoryName) {
+              this.cateName.push(v.recycleCategoryName)
+            }
           })
+        }
+      })
+    },
+    save() {
+      var {form, cateList, selectValue} = this
+      console.log(this.form, 'form')
+      var data = Object.assign({}, form)
+      if (!data.recycleName) {
+        this.$toast('请输入垃圾名称!')
+        return
+      }
+      if (!data.mobile) {
+        this.$toast('请输入手机号!')
+        return
+      }
+      if (!selectValue) {
+        this.$toast('请选择垃圾的分类!')
+        return
+      }
+      if (!this.checkData.id) {
+        this.$toast('请选择收获地址!')
+        return
+      }
+      if (!data.appointmentTime) {
+        this.$toast('请输入预约时间!')
+        return
+      }
+      data.imgUrl = this.imgUrl
+      data.addressId = this.checkData.id
+      data.recycleCategoryId = cateList[selectValue].id
+      console.log(data, 'data')
+      this.$post('api/recycle/save', data).then(res => {
+        if (res.data.success) {
+          this.$toast('提交成功!')
+          setTimeout(() => {
+            wx.navigateBack()
+          }, 1000)
+        } else {
+          this.$toast(res.data.msg)
         }
       })
     }
@@ -150,7 +264,7 @@ export default {
   justify-content: space-between;
   height: 0.8rem;
   align-items: center;
-  padding: 0 0.2rem;
+  padding: 0 0.3rem;
   position: relative;
   flex-wrap: nowrap;
   border-bottom: 1px solid #f1f1f1;
@@ -163,7 +277,7 @@ export default {
     height: 0.3rem;
   }
   .picker {
-    font-size: 0.33rem;
+    font-size: 0.3rem;
     color: #333;
     flex: 1;
     text-indent: 0.2rem;
@@ -180,8 +294,27 @@ export default {
   }
   input {
     flex: 1;
+    font-size: 0.3rem;
+    text-align: center;
     padding-left: 0.2rem;
     text-indent: 0.3rem;
+  }
+  .input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    color: #888;
+    position: relative;
+    &.hasVal {
+      color: #333;
+    }
+    img {
+      position: absolute;
+      right: 0.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
   }
   select {
     flex: 1;
@@ -191,6 +324,12 @@ export default {
 .record {
   padding-bottom: 0.25rem;
   border-radius: 0.1rem;
+  padding-left: 0.3rem;
+  .t {
+    display: flex;
+    align-items: center;
+    height: 0.8rem;
+  }
   .imgwrap {
     width: 100%;
     display: flex;

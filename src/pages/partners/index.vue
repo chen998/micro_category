@@ -10,6 +10,7 @@
       class="role"
       v-for="(item, index) in list"
       :key="index"
+      @click="nav(item)"
     >
       <div class="t">{{item.recruitmentName}}</div>
       <!-- <div class="desc rows">
@@ -73,6 +74,10 @@ export default {
     this.getData()
   },
   methods: {
+    nav(item) {
+      this.$setStorage('html', item.recruitmentContent)
+      this.$nav("../webview/main")
+    },
     getData () {
       this.$get('api/recruitment/findAll').then(res => {
         if (res.data.success) {

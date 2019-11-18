@@ -46,7 +46,7 @@
               src="/static/img/phone.png"
               alt=""
             >
-            17640150504
+            13222222222
           </div>
         </div>
         <div
@@ -72,15 +72,15 @@
       <div class="title">我的资产</div>
       <div class="integralItem">
         <div class="t">当前积分</div>
-        <div class="val">98</div>
+        <div class="val">{{Integral || 0}}</div>
       </div>
       <div class="integralItem">
         <div class="t">投递次数</div>
-        <div class="val">39</div>
+        <div class="val">{{Excount || 0}}</div>
       </div>
       <div class="integralItem">
         <div class="t">环保积分</div>
-        <div class="val">70</div>
+        <div class="val">{{Integral || 0}}</div>
       </div>
     </div>
     <div class="row-list">
@@ -117,7 +117,7 @@
           >
         </div>
       </div> -->
-      <div class="row">
+      <!-- <div class="row">
         <div class="left">
           <img
             src="/static/img/huizhang.png"
@@ -131,14 +131,17 @@
             alt=""
           >
         </div>
-      </div>
-      <div class="row">
+      </div> -->
+      <div
+        class="row"
+        @click="$nav('../orderList/main')"
+      >
         <div class="left">
           <img
             src="/static/img/lipin.png"
             alt=""
           >
-          我的礼品
+          兑换记录
         </div>
         <div class="right">
           <img
@@ -348,7 +351,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters(['userInfo', 'Integral', 'Excount'])
   },
   onLoad () {
   },

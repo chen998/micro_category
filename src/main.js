@@ -17,6 +17,7 @@ Vue.prototype.$req = http.request
 Vue.prototype.$post = http.post
 Vue.prototype.$get = http.get
 Vue.prototype.$ApiUrl = http.ApiUrl
+Vue.prototype.$baseUrl = http.baseUrl
 
 Vue.prototype.$login = http.login
 Vue.prototype.$checkSession = http.checkSession

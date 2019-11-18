@@ -18,7 +18,64 @@
           @click="tabIndex = 3"
         >厨余垃圾</div>
       </div>
-      <div class="recordList">
+      <div
+        class="recordList"
+        v-if="tabIndex == 1"
+      >
+        <div
+          class="recordItem"
+          v-for="(item, index) in list"
+          :key="index"
+        >
+          aaaaaaaa
+        </div>
+        <div
+          class="recordItem none"
+          v-if="list.length < 1"
+        >
+          暂无数据
+        </div>
+      </div>
+      <div
+        class="recordList"
+        v-if="tabIndex == 2"
+      >
+        <div
+          class="recordItem"
+          v-for="(item, index) in recycleList"
+          :key="index"
+          @click="$setStorage('item', item);$nav('../submit_come_in/main?storage=1')"
+        >
+          <div class="rows t">
+            垃圾名称: {{item.recycleName}}
+          </div>
+          <div class="rows">
+            垃圾类别: {{item.recycleCategoryName}}
+          </div>
+          <div class="rows">
+            投递时间: {{item.createTime}}
+          </div>
+          <div class="rows">
+            联系方式: {{item.mobile}}
+          </div>
+          <div
+            class="rows"
+            v-if="item.message"
+          >
+            备注: {{item.message}}
+          </div>
+        </div>
+        <div
+          class="recordItem none"
+          v-if="recycleList.length < 1"
+        >
+          暂无数据
+        </div>
+      </div>
+      <div
+        class="recordList"
+        v-if="tabIndex == 3"
+      >
         <div
           class="recordItem"
           v-for="(item, index) in list"
@@ -95,6 +152,19 @@ img {
     min-height: 2rem;
     margin: 0 0.2rem;
     margin-bottom: 0.2rem;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    .rows {
+      padding: 0.2rem;
+      font-size: 0.26rem;
+      color: #777;
+      &.t {
+        font-weight: bold;
+        color: #333;
+        font-size: 0.3rem;
+      }
+    }
     &:first-child {
       margin-top: 1.2rem;
     }
@@ -115,15 +185,25 @@ export default {
   data () {
     return {
       list: [],
-      tabIndex: 1
+      tabIndex: 1,
+      recycleList: []
     }
   },
-  created () {
-    console.log('hha')
+  onShow () {
+    this.getList()
   },
   methods: {
-    dd () {
-      console.log('hahha')
+    getList() {
+      this.$get('api/recyclecategory/findAll').then(res => {
+        if (res.data.success) {
+          this.recycleList = res.data.data
+          this.recycleList.forEach(v => {
+            if (typeof v.createTime == 'number') {
+              v.createTime = new Date(v.createTime).toLocaleString()
+            }
+          })
+        }
+      })
     }
   }
 }

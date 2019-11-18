@@ -13,6 +13,7 @@
             class="swiper-item"
             v-for="(item, index) in advertList"
             :key="index"
+            @click="nav(item)"
           >
             <swiper-item>
               <image
@@ -95,7 +96,10 @@
             alt=""
           >
         </div>
-        <div class="advert-item">
+        <div
+          class="advert-item"
+          @click="$nav('../tab_3/main', 2)"
+        >
           <div class="left">
             <h2>积分商城</h2>
             <!-- <span>足不出户在线下单</span> -->
@@ -118,7 +122,7 @@
         >
           <div class="left">
             <div class="account">
-              <span class="num">{{Integral}}</span>
+              <span class="num">{{ Integral || 0}}</span>
               <div class="title">当前积分</div>
             </div>
           </div>
@@ -128,7 +132,7 @@
               <div class="title">投递次数</div>
             </div>
             <div class="account">
-              <span class="num">{{Excount}}</span>
+              <span class="num">{{Excount || 0}}</span>
               <div class="title">兑换次数</div>
             </div>
           </div>
@@ -459,7 +463,11 @@ export default {
   components: {
     login
   },
+  onLoad() {
+    this.$checkSession('GET')
+  },
   onShow () {
+    this.updateMoney()
     this.init()
     this.getAdvert()
   },
@@ -467,9 +475,17 @@ export default {
     ...mapState(['Integral', 'Excount'])
   },
   methods: {
+    nav(item) {
+      this.$nav('../webview/main')
+    },
+    updateMoney() {
+      this.$store.dispatch('updateIntegral')
+      this.$store.dispatch('updateExcount')
+    },
     sign () {
       this.$get('api/signin/userSignin').then(res => {
         if (res.data.success) {
+          this.updateMoney()
           this.$toast(res.data.msg)
         }
       })
@@ -512,6 +528,7 @@ export default {
           var markerData = res.data.data[0]
           markerData.dist = (markerData.dist / 1000).toFixed(2) + 'km'
           this.markerData = markerData
+          this.$setStorage('nearData', markerData)
         }
       })
     },

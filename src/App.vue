@@ -7,7 +7,7 @@ export default{
     this.$checkSession('GET')
     this.$store.dispatch('updateIntegral')
     this.$store.dispatch('updateExcount')
-  }
+  },
 }
 </script>
 
@@ -21,15 +21,16 @@ button {
   }
 }
 .submit-us {
-  width: 3rem;
-  height: 0.65rem;
-  line-height: 0.65rem;
+  width: 90%;
+  height: 0.7rem;
+  line-height: 0.7rem;
   border-radius: 0.5rem;
   font-size: 0.28rem;
   margin: 0.2rem auto;
   text-align: center;
-  background: #fff;
-  color: #888;
+  background: #54bf7b;
+  color: #fff;
+  margin-top: 1rem;
 }
 .container {
   height: 100%;

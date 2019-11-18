@@ -199,7 +199,7 @@ export default {
           var list = res.data.data
           list.forEach(v => {
             if (v.productIcon) {
-              v.productIcon = this.$ApiUrl + v.productIcon.substr(1)
+              v.productIcon = this.$baseUrl + v.productIcon.substr(1)
             }
           })
           this.list = list

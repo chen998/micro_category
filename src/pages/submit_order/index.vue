@@ -126,8 +126,6 @@ export default {
       data.productId = data.id
       this.$get('api/orders/save', data).then(res => {
         if (res.data.success) {
-          this.$store.dispatch('updateIntegral')
-          this.$store.dispatch('updateExcount')
           wx.showModal({
             title: '下单成功',
             cancelText: '回到首页',
