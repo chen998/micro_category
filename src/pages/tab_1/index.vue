@@ -464,9 +464,9 @@ export default {
     login
   },
   onLoad() {
-    this.$checkSession('GET')
   },
   onShow () {
+    this.$checkSession('GET')
     this.updateMoney()
     this.init()
     this.getAdvert()
