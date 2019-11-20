@@ -3,9 +3,10 @@
  */
 import tool from './index'
 import store from '@/store'
-var ApiUrl = 'http://mengzhou.nat300.top/'
+var ApiUrl = 'https://mengzhou.mynatapp.cc/'
 // var ApiUrl = 'http://192.168.0.105:8888/'
-var baseUrl = 'http://mengzhou.nat300.top/'
+var baseUrl = 'https://mengzhou.mynatapp.cc/'
+
 
 function login(method = 'POST') {
   return new Promise((resolve, reject) => {

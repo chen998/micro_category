@@ -4,6 +4,7 @@
       <div class="desc">
         <textarea
           name=""
+          v-model="communityContent"
           placeholder="分享新鲜事..."
           id=""
           cols="30"
