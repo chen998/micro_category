@@ -55,7 +55,7 @@
         >
           <button
             open-type="getUserInfo"
-            class="submit-us"
+            class="loginBtn"
             @getuserinfo="getUserInfo"
           >立即登录</button>
         </div>
@@ -187,6 +187,13 @@
   </div>
 </template>
 <style lang="scss" scoped>
+.loginBtn {
+  background: #fff;
+  border-radius: 0.3rem;
+  height: 0.6rem;
+  display: flex;
+  align-items: center;
+}
 .integralWrap {
   background: #fff;
   border-radius: 0.2rem;
@@ -265,6 +272,7 @@ img {
     display: flex;
     margin-top: -1rem;
     width: 100%;
+    align-items: center;
     .head {
       width: 1.2rem;
       height: 1.2rem;

@@ -58,7 +58,7 @@ function showToast(text) {
     title: text,
     icon: 'none',
     mask: true,
-    duration: 1500
+    duration: 2200
   })
 }
 

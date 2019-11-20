@@ -366,6 +366,7 @@ img {
 }
 </style>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -380,12 +381,14 @@ export default {
       autoplay: false,
       interval: 5000,
       duration: 1000,
-      comList: [],
-      userInfo: this.$store.getters.userInfo
+      comList: []
     }
   },
   onShow () {
     this.getList()
+  },
+  computed:{
+    ...mapGetters(['userInfo'])
   },
   methods: {
     nav(item) {
