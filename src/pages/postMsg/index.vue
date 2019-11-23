@@ -67,7 +67,6 @@ export default {
     this.imgs = []
   },
   onUnload () {
-    imgs: []
   },
   computed: {
     ...mapState(['checkData'])
@@ -107,8 +106,9 @@ export default {
         this.$toast('内容不能为空!')
         return
       }
+      var fileIndex = this.imgUrl.indexOf('file')
       var data = {
-        communityIcon: this.imgUrl,
+        communityIcon: this.imgUrl.substr(fileIndex),
         communityContent: this.communityContent,
         area: this.$getStorage('nearData').cabinetName
       }

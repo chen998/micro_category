@@ -31,15 +31,33 @@
         暂无收货地址
       </div>
     </div>
-    <div class="btnWrap">
+    <!-- <div class="btnWrap">
       <div
         class="submit"
         @click="$nav('../Add_address/main')"
       >添加收货地址</div>
+    </div> -->
+    <div class="submit-wrap">
+      <div
+        class="submit-us"
+        @click="$nav('../Add_address/main')"
+      >
+        添加收货地址
+      </div>
     </div>
   </div>
 </template>
 <style lang="scss" scoped>
+.submit-wrap {
+  position: fixed;
+  background: #fff;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  .submit-us {
+    margin: 0.3rem auto;
+  }
+}
 .page {
   height: 100vh;
   width: 100%;
@@ -154,6 +172,7 @@ export default {
         this.$store.commit('SET_CHECKEDDATA', item)
         wx.navigateBack();
       } else {
+        
         this.$nav('../Add_address/main?isEdit=true&item=' + JSON.stringify(item))
       }
     }
