@@ -248,7 +248,7 @@ export default {
       duration: 1000,
       id: '',
       info: {},
-	  serverSrc: "http://mengzhou.nat300.top",
+	  serverSrc: this.$baseUrl,
 	  html:''
     }
   },
