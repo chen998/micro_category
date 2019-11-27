@@ -312,8 +312,8 @@ img {
       justify-content: space-between;
       padding: 0.25rem 0;
       .head {
-        width: 1.2rem;
-        height: 1.2rem;
+        width: 1rem;
+        height: 1rem;
         border-radius: 50%;
         overflow: hidden;
         margin-right: 0.15rem;
@@ -339,6 +339,9 @@ img {
         text-align: right;
         color: #888;
         font-size: 0.26rem;
+        .label {
+          margin-bottom: 0.1rem;
+        }
         .date {
         }
       }

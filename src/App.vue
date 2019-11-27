@@ -4,9 +4,9 @@ export default{
     return {}
   },
   created () {
-    this.$checkSession('GET')
-    this.$store.dispatch('updateIntegral')
-    this.$store.dispatch('updateExcount')
+    this.$checkSession()
+    // this.$store.dispatch('updateIntegral')
+    // this.$store.dispatch('updateExcount')
   },
 }
 </script>
@@ -19,6 +19,9 @@ button {
     content: "";
     border: none;
   }
+}
+* {
+  font-family: "SimHei";
 }
 .submit-us {
   width: 90%;

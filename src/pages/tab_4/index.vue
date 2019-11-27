@@ -44,7 +44,6 @@
           class="recordItem"
           v-for="(item, index) in recycleList"
           :key="index"
-          @click="$setStorage('item', item);$nav('../submit_come_in/main?storage=1')"
         >
           <div class="rows t">
             垃圾名称: {{item.recycleName}}

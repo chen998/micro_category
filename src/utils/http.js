@@ -50,6 +50,7 @@ function checkSession() {
         success: function (res) {
           var data = res.data;
           //redis缓存过期,重新调用login
+          console.log(data, 'data')
           if (data.success == false) {
             wx.login({
               success: function (res) {
@@ -71,6 +72,8 @@ function checkSession() {
               }
             })
           }
+          store.dispatch('updateIntegral')
+          store.dispatch('updateExcount')
         },
       })
     },
@@ -88,6 +91,8 @@ function checkSession() {
               success(res) {
                 var data = res.data;
                 wx.setStorageSync('sessionKey', data.sessionKey); //放入本地缓存
+                store.dispatch('updateIntegral')
+                store.dispatch('updateExcount')
               }
             })
           } else {

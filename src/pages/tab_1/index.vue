@@ -146,6 +146,15 @@
       </div>
       <div class="address-wrap">
         <div
+          class="noAuth"
+          v-if="noAuth"
+        >
+          <div
+            class="btn"
+            @click="getUserLocation()"
+          >授权位置</div>
+        </div>
+        <div
           class="showAll"
           @click="$nav('../map/main')"
         >
@@ -347,6 +356,30 @@ img {
   justify-content: space-between;
   font-size: 0.3rem;
   color: #333;
+  position: relative;
+  overflow: hidden;
+  .noAuth {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+    background: rgba(255, 255, 255, 0.7);
+    .btn {
+      width: 3rem;
+      height: 0.75rem;
+      line-height: 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.28rem;
+      text-align: center;
+      background: #54bf7b;
+      color: #fff;
+    }
+  }
   .showAll {
     width: 100%;
     text-align: right;
@@ -457,25 +490,136 @@ export default {
       form: {
         lat: '',
         lon: ''
-      }
+      },
+      noAuth: false
     }
   },
   components: {
     login
   },
-  onLoad() {
-  },
   onShow () {
-    this.$checkSession('GET')
-    this.updateMoney()
-    this.init()
+    this.$checkSession()
+    // this.init()
+    this.getUserLocation()
     this.getAdvert()
   },
   computed: {
     ...mapState(['Integral', 'Excount'])
   },
   methods: {
+    getUserLocation: function () {
+        let vm = this
+        wx.getSetting({
+            success: (res) => {
+                // res.authSetting['scope.userLocation'] == undefined    表示 初始化进入该页面
+                // res.authSetting['scope.userLocation'] == false    表示 非初始化进入该页面,且未授权
+                // res.authSetting['scope.userLocation'] == true    表示 地理位置授权
+                // 拒绝授权后再次进入重新授权
+                if (res.authSetting['scope.userLocation'] != undefined && res.authSetting['scope.userLocation'] != true) {
+                    // console.log('authSetting:status:拒绝授权后再次进入重新授权', res.authSetting['scope.userLocation'])
+                    wx.showModal({
+                        title: '',
+                        content: '此程序需要获取你的地理位置，请确认授权',
+                        success: function (res) {
+                            if (res.cancel) {
+                                wx.showToast({
+                                    title: '拒绝授权',
+                                    icon: 'none'
+                                })
+                                setTimeout(() => {
+                                    wx.navigateBack()
+                                }, 1500)
+                            } else if (res.confirm) {
+                                wx.openSetting({
+                                    success: function (dataAu) {
+                                        // console.log('dataAu:success', dataAu)
+                                        if (dataAu.authSetting["scope.userLocation"] == true) {
+                                            //再次授权，调用wx.getLocation的API
+                                            vm.getLocation(dataAu)
+                                        } else {
+                                            wx.showToast({
+                                                title: '授权失败',
+                                                icon: 'none'
+                                            })
+                                            setTimeout(() => {
+                                                wx.navigateBack()
+                                            }, 1500)
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                    })
+                }
+                // 初始化进入，未授权
+                else if (res.authSetting['scope.userLocation'] == undefined) {
+                    // console.log('authSetting:status:初始化进入，未授权', res.authSetting['scope.userLocation'])
+                    //调用wx.getLocation的API
+                    vm.getLocation(res)
+                }
+                // 已授权
+                else if (res.authSetting['scope.userLocation']) {
+                    // console.log('authSetting:status:已授权', res.authSetting['scope.userLocation'])
+                    //调用wx.getLocation的API
+                    vm.noAuth = false
+                    vm.getLocation(res)
+                }
+            }
+        })
+    },
+    // 微信获得经纬度
+    getLocation: function (userLocation) {
+        let vm = this
+        wx.getLocation({
+            type: "wgs84",
+            success: function (res) {
+                // console.log('getLocation:success', res)
+                var latitude = res.latitude
+                var longitude = res.longitude
+                vm.form.lat = res.latitude
+                vm.form.lon = res.longitude
+                vm.getData()
+            },
+            fail: function (res) {
+                // console.log('getLocation:fail', res)
+                if (res.errMsg === 'getLocation:fail:auth denied') {
+                    wx.showToast({
+                        title: '拒绝授权',
+                        icon: 'none'
+                    })
+                    vm.noAuth = true
+                    setTimeout(() => {
+                        wx.navigateBack()
+                    }, 1500)
+                    return
+                }
+                if (!userLocation || !userLocation.authSetting['scope.userLocation']) {
+                    vm.getUserLocation()
+                } else if (userLocation.authSetting['scope.userLocation']) {
+                    wx.showModal({
+                        title: '',
+                        content: '请在系统设置中打开定位服务',
+                        showCancel: false,
+                        success: result => {
+                            if (result.confirm) {
+                                wx.navigateBack()
+                            }
+                        }
+                    })
+                } else {
+                    wx.showToast({
+                        title: '授权失败',
+                        icon: 'none'
+                    })
+                    setTimeout(() => {
+                        wx.navigateBack()
+                    }, 1500)
+                }
+            }
+        })
+    },
     nav(item) {
+      this.$setStorage('html', item.describe)
       this.$nav('../webview/main')
     },
     updateMoney() {

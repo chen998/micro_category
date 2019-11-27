@@ -9,7 +9,14 @@ const store = new vuex.Store({
     userInfo: {},
     checkData: {}, // 临时存储选中的数据
     Integral: '', // 积分
-    Excount: '' // 次数
+    Excount: '', // 次数
+    form: {
+      recycleName: '',
+      appointmentTime: '',
+      message: '',
+      mobile: '',
+      addressId: ''
+    }
   },
   mutations: {
     toggleLogin(state, data) {
@@ -17,6 +24,9 @@ const store = new vuex.Store({
     },
     SET_CHECKEDDATA(state, data) {
       state.checkData = data
+    },
+    SET_Form(state, data) {
+      state.form = data
     },
     saveUserInfo(state, data) {
       state.userInfo = data
@@ -33,6 +43,7 @@ const store = new vuex.Store({
       return userInfo
     },
     checkData: state => state.checkData,
+    form: state => state.form,
     Integral: state => state.Integral,
     Excount: state => state.Excount
   },

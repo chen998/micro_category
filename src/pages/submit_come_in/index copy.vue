@@ -5,8 +5,7 @@
         <div class="label">垃圾名称</div>
         <input
           type="text"
-          :value="form.recycleName"
-          @blur="setInput($event, 'recycleName')"
+          v-model="form.recycleName"
           placeholder="请输入垃圾名称"
         />
       </div>
@@ -29,8 +28,7 @@
         <input
           type="number"
           maxlength="11"
-          @blur="setInput($event, 'mobile')"
-          :value="form.mobile"
+          v-model="form.mobile"
           placeholder="请输入手机号"
         />
       </div>
@@ -68,9 +66,8 @@
         <div class="label">备注</div>
         <input
           type="text"
-          :value="form.message"
+          v-model="form.message"
           placeholder="备注"
-          @blur="setInput($event, 'message')"
         />
       </div>
       <div class="record us">
@@ -193,7 +190,7 @@ export default {
     this.getDate()
   },
   computed: {
-    ...mapGetters(['form', 'checkData'])
+    ...mapState(['form', 'checkData'])
   },
   onShow() {
     console.log(this.form, 'form')
@@ -205,12 +202,8 @@ export default {
     this.imgUrl = ''
     this.baseImgUrl = ''
     this.$store.commit('SET_CHECKEDDATA', {})
-    this.$store.commit('SET_FORM', {})
   },
   methods: {
-    setInput(e, key) {
-      this.form[key] = e.mp.detail.value
-    },
     getDate() {
       var date = new Date().getDate()
       var max = date + 30
@@ -403,10 +396,12 @@ export default {
   text-indent: 0.2rem;
   text-align: left;
   height: 100%;
+  color: #fa791a;
   position: relative;
   white-space: nowrap;
   flex: 1;
   padding: 0.1rem 0;
+  color: #fa791a;
   position: relative;
   span {
     color: #888;
@@ -488,7 +483,6 @@ export default {
     align-items: center;
     flex: 1;
     padding-left: 0.2rem;
-    padding-bottom: 0.1rem;
     color: #888;
     position: relative;
     &.hasVal {

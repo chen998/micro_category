@@ -18,7 +18,6 @@
   width: 100%;
   min-height: 100%;
   background: #f5f5f5;
-  color: #fff;
   font-size: 0.3rem;
   .main {
     margin: 0.3rem;
